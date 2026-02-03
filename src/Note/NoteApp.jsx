@@ -18,9 +18,9 @@ export default function NoteApp() {
     setNotes(draft => {
       draft.push({
         id: id++,
-        text: text,
-        text2: text2,
-        text3: text3,
+        text,
+        text2,
+        text3,
         done: false,
       });
     });
@@ -28,42 +28,55 @@ export default function NoteApp() {
 
   function handleChangeNote(note) {
     setNotes(draft => {
-      const index = draft.findIndex(item =>
-        item.id === note.id
-      );
+      const index = draft.findIndex(item => item.id === note.id);
       draft[index] = note;
     });
   }
 
   function handleDeleteNote(note) {
     setNotes(draft => {
-      const index = draft.findIndex(item =>
-        item.id === note.id
-      );
+      const index = draft.findIndex(item => item.id === note.id);
       draft.splice(index, 1);
     });
   }
 
   return (
-    <div>
-      <h1>Note App</h1>
-      <NoteForm onAddNote={handleAddNote} />
-      <NoteList
-        notes={notes}
-        onChange={handleChangeNote}
-        onDelete={handleDeleteNote}
-      />
+    <div
+      style={{
+        minHeight: "100vh",
+        background: "#f4f6fb",
+        padding: "40px",
+        fontFamily: "system-ui, sans-serif",
+      }}
+    >
+      <div
+        style={{
+          maxWidth: "650px",
+          margin: "0 auto",
+          background: "#fff",
+          padding: "24px",
+          borderRadius: "12px",
+          boxShadow: "0 10px 25px rgba(0,0,0,0.08)",
+        }}
+      >
+        <h1
+          style={{
+            textAlign: "center",
+            marginBottom: "24px",
+            color: "#333",
+          }}
+        >
+          📝 Note App
+        </h1>
+
+        <NoteForm onAddNote={handleAddNote} />
+
+        <NoteList
+          notes={notes}
+          onChange={handleChangeNote}
+          onDelete={handleDeleteNote}
+        />
+      </div>
     </div>
   );
 }
-
-// Alur Create Data
-
-// 1. Membuat state notes
-// 2. Membuat function handleAddNote
-// 3. Membuat function handleChangeNote
-// 4. Membuat function handleDeleteNote
-// 5. Membuat function NoteApp
-// 6. Membuat function NoteForm
-// 7. Membuat function NoteList
-// 8. Membuat function Note
