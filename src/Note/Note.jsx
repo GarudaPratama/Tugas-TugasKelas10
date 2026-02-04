@@ -85,6 +85,6 @@ export default function Note({ note, onChange, onDelete }) {
       >
         Delete
       </button>
-    </div>
+    </div>  
   );
 }
