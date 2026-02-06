@@ -1,55 +1,67 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { NotesDispatchContext } from "./NoteContext";
 
-export default function NoteForm({ onAddNote }) {
+export default function NoteForm() {
+  const [name, setName] = useState("");
   const [text, setText] = useState("");
-  const [text2, setText2] = useState("");
-  const [text3, setText3] = useState("");
+  const dispatch = useContext(NotesDispatchContext);
 
-  function handleClick() {
-    onAddNote(text, text2, text3);
+  function handleAdd() {
+    if (!text.trim() || !name.trim()) return;
+
+    dispatch({
+      type: "ADD_NOTE",
+      note: {
+        id: Date.now(),
+        name,
+        text,
+        done: false,
+      },
+    });
+
+    setName("");
     setText("");
-    setText2("");
-    setText3("");
   }
 
-  const inputStyle = {
-    flex: 1,
-    padding: "8px 10px",
-    borderRadius: "6px",
-    border: "1px solid #ccc",
-  };
-
   return (
-    <div style={{ display: "flex", gap: "8px", marginBottom: "20px" }}>
+    <div style={{ display: "flex", gap: "10px", marginBottom: "24px" }}>
       <input
-        placeholder="Note 1"
+        placeholder="Name"
+        value={name}
+        onChange={e => setName(e.target.value)}
+        style={{
+          padding: "12px 14px",
+          borderRadius: "10px",
+          border: "1px solid #e5e7eb",
+          fontSize: "14px",
+          outline: "none",
+          width: "120px",
+        }}
+      />
+
+      <input
+        placeholder="Write a note..."
         value={text}
         onChange={e => setText(e.target.value)}
-        style={inputStyle}
-      />
-
-      <input
-        placeholder="Note 2"
-        value={text2}
-        onChange={e => setText2(e.target.value)}
-        style={inputStyle}
-      />
-
-      <input
-        placeholder="Note 3"
-        value={text3}
-        onChange={e => setText3(e.target.value)}
-        style={inputStyle}
+        style={{
+          flex: 1,
+          padding: "12px 14px",
+          borderRadius: "10px",
+          border: "1px solid #e5e7eb",
+          fontSize: "14px",
+          outline: "none",
+        }}
       />
 
       <button
-        onClick={handleClick}
+        onClick={handleAdd}
         style={{
-          padding: "8px 14px",
-          borderRadius: "6px",
+          padding: "12px 18px",
+          borderRadius: "10px",
           border: "none",
           background: "#4f46e5",
           color: "#fff",
+          fontWeight: "700",
           cursor: "pointer",
         }}
       >

@@ -1,14 +1,28 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { NotesDispatchContext } from "./NoteContext";
 
-export default function Note({ note, onChange, onDelete }) {
+export default function Note({ note }) {
+  const dispatch = useContext(NotesDispatchContext);
   const [isEditing, setIsEditing] = useState(false);
 
-  function handleChangeText(e) {
-    onChange({ ...note, text: e.target.value });
+  function handleTextChange(e) {
+    dispatch({
+      type: "CHANGE_TEXT",
+      id: note.id,
+      text: e.target.value,
+    });
   }
 
-  function handleChangeDone(e) {
-    onChange({ ...note, done: e.target.checked });
+  function handleDoneChange(e) {
+    dispatch({
+      type: "CHANGE_DONE",
+      id: note.id,
+      done: e.target.checked,
+    });
+  }
+
+  function handleDelete() {
+    dispatch({ type: "DELETE_NOTE", id: note.id });
   }
 
   return (
@@ -17,74 +31,79 @@ export default function Note({ note, onChange, onDelete }) {
         display: "flex",
         alignItems: "center",
         gap: "10px",
-        padding: "12px",
-        borderRadius: "8px",
-        background: "#fafafa",
+        padding: "14px",
+        borderRadius: "12px",
+        background: "#f9fafb",
         border: "1px solid #e5e7eb",
       }}
     >
-      <input
-        type="checkbox"
-        checked={note.done}
-        onChange={handleChangeDone}
-      />
+      <input type="checkbox" checked={note.done} onChange={handleDoneChange} />
 
       <div style={{ flex: 1 }}>
+        <div
+          style={{
+            fontSize: "12px",
+            fontWeight: "700",
+            color: "#4f46e5",
+            marginBottom: "4px",
+          }}
+        >
+          {note.name}
+        </div>
+
         {isEditing ? (
-          <>
-            <input
-              value={note.text}
-              onChange={handleChangeText}
-              style={{
-                padding: "6px",
-                borderRadius: "6px",
-                border: "1px solid #ccc",
-              }}
-            />
-            <button
-              onClick={() => setIsEditing(false)}
-              style={{ marginLeft: "6px" }}
-            >
-              Save
-            </button>
-          </>
-        ) : (
-          <span
+          <input
+            value={note.text}
+            onChange={handleTextChange}
             style={{
+              width: "100%",
+              padding: "8px 10px",
+              borderRadius: "8px",
+              border: "1px solid #d1d5db",
+            }}
+          />
+        ) : (
+          <div
+            style={{
+              fontWeight: "600",
+              color: note.done ? "#9ca3af" : "#111827",
               textDecoration: note.done ? "line-through" : "none",
-              color: note.done ? "#9ca3af" : "#111",
             }}
           >
-            {note.text} {note.text2} {note.text3}
-          </span>
+            {note.text}
+          </div>
         )}
       </div>
 
       <button
-        onClick={() => setIsEditing(true)}
+        onClick={() => setIsEditing(!isEditing)}
         style={{
           border: "none",
           background: "#e0e7ff",
-          padding: "4px 8px",
-          borderRadius: "6px",
+          color: "#3730a3",
+          fontWeight: "600",
+          padding: "6px 10px",
+          borderRadius: "8px",
           cursor: "pointer",
         }}
       >
-        Edit
+        {isEditing ? "Save" : "Edit"}
       </button>
 
       <button
-        onClick={() => onDelete(note)}
+        onClick={handleDelete}
         style={{
           border: "none",
           background: "#fee2e2",
-          padding: "4px 8px",
-          borderRadius: "6px",
+          color: "#991b1b",
+          fontWeight: "600",
+          padding: "6px 10px",
+          borderRadius: "8px",
           cursor: "pointer",
         }}
       >
         Delete
       </button>
-    </div>  
+    </div>
   );
 }

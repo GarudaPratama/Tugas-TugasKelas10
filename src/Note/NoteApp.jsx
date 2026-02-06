@@ -1,6 +1,10 @@
-import { useImmer } from "use-immer";
+import { useImmerReducer } from "use-immer";
 import NoteForm from "./NoteForm.jsx";
 import NoteList from "./NoteList.jsx";
+import notesReducer, {
+  NotesContext,
+  NotesDispatchContext,
+} from "./NoteContext";
 
 let id = 0;
 
@@ -12,71 +16,37 @@ const initialNotes = [
 ];
 
 export default function NoteApp() {
-  const [notes, setNotes] = useImmer(initialNotes);
-
-  function handleAddNote(text, text2, text3) {
-    setNotes(draft => {
-      draft.push({
-        id: id++,
-        text,
-        text2,
-        text3,
-        done: false,
-      });
-    });
-  }
-
-  function handleChangeNote(note) {
-    setNotes(draft => {
-      const index = draft.findIndex(item => item.id === note.id);
-      draft[index] = note;
-    });
-  }
-
-  function handleDeleteNote(note) {
-    setNotes(draft => {
-      const index = draft.findIndex(item => item.id === note.id);
-      draft.splice(index, 1);
-    });
-  }
+  const [notes, dispatch] = useImmerReducer(notesReducer, initialNotes);
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        background: "#f4f6fb",
-        padding: "40px",
-        fontFamily: "system-ui, sans-serif",
-      }}
-    >
-      <div
-        style={{
-          maxWidth: "650px",
-          margin: "0 auto",
-          background: "#fff",
-          padding: "24px",
-          borderRadius: "12px",
-          boxShadow: "0 10px 25px rgba(0,0,0,0.08)",
-        }}
-      >
-        <h1
+    <NotesContext.Provider value={notes}>
+      <NotesDispatchContext.Provider value={dispatch}>
+        <div
           style={{
-            textAlign: "center",
-            marginBottom: "24px",
-            color: "#333",
+            maxWidth: "520px",
+            margin: "40px auto",
+            padding: "24px",
+            borderRadius: "16px",
+            background: "#ffffff",
+            boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
+            fontFamily: "Inter, system-ui, sans-serif",
           }}
         >
-          📝 Note App
-        </h1>
+          <h1
+            style={{
+              fontSize: "28px",
+              fontWeight: "800",
+              marginBottom: "20px",
+              color: "#111827",
+            }}
+          >
+            Note App
+          </h1>
 
-        <NoteForm onAddNote={handleAddNote} />
-
-        <NoteList
-          notes={notes}
-          onChange={handleChangeNote}
-          onDelete={handleDeleteNote}
-        />
-      </div>
-    </div>
+          <NoteForm />
+          <NoteList />
+        </div>
+      </NotesDispatchContext.Provider>
+    </NotesContext.Provider>
   );
 }
