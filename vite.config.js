@@ -9,7 +9,9 @@ export default defineConfig({
       input: {
         index: 'index.html',
         note: 'note.html',
-        profile: 'profile.html'
+        profile: 'profile.html',
+        timer: 'timer.html',
+        guestbook: 'guestbook.html'
       }
     }
   }
