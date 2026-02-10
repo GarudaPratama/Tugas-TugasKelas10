@@ -1,4 +1,5 @@
- import { useState, useRef } from "react";
+import { useState, useRef } from "react";
+import GuestBookInput from "./GuestBookInput";
 
 export default function GuestBook() {
   const [name, setName] = useState("");
@@ -20,17 +21,12 @@ export default function GuestBook() {
   return (
     <>
       <h1>Guest Book</h1>
-      <form>
-        <label htmlFor="name">Name</label>
-        <br />
-        <input
+      <form onSubmit={handleSubmit}>
+        <GuestBookInput
           ref={nameInput}
-          type="text"
-          name="name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          name={name}
+          setName={setName}
         />
-        <br />
 
         <label htmlFor="message">Message</label>
         <br />
@@ -41,11 +37,8 @@ export default function GuestBook() {
         />
         <br />
 
-        <button type="submit" onClick={handleSubmit}>
-          Submit
-        </button>
+        <button type="submit">Submit</button>
       </form>
     </>
   );
 }
-   
